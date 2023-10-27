@@ -1,0 +1,29 @@
+upstreams:
+  -
+    name: Public Facing APIs
+    id: carnera
+    type: roundrobin
+    nodes:
+      "httpbin.org:80": 1
+routes:
+  -
+    name: Keycloak Authenticator
+    uri: /*
+    upstream_id: carnera
+    plugins:
+      openid-connect:
+        client_id: rest-client
+        client_secret: uvxcRr8qc9x7tEFDdiUrkYdxhLzJpLjD
+        discovery: https://gladiator-keycloak-test.mooo.com/realms/bank-of-carnera/.well-known/openid-configuration
+        scope: openid email profile
+        bearer_only: true
+        realm: bank-of-carnera
+        introspection_endpoint_auth_method: client_secret_post
+        redirect_uri: httpbin.org:80/get,
+        token_signing_alg_values_expected: "RS256"
+        public_key: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7h2nrWn10HivQ/0w064MaZNlUqRx+tHTqn9Xy+RgDPK9HcJauVBboKxxZTXY0ze7UXBbC5JculyI5gWhJHlDTZFjeA1/SigXzPSeEEB2/GCGroJBRzYMwY2EFk1nnoCxWbRTyF2H89JNkbdoMP4hGH7fNkueEPGIjmg5nw1HwcGjKBWKESUovSYLhcoNz1Tv79bKrlc0l9aZVPQjLdZcK0NACZ2ZaVEbd/1dEOq+2TXGmAv0CzOE+2FkxeFssAJgs6CphmieZjDTLa6gfp6KEhY++G/WUcbYzmD8MB0+fELW3mFXncgPbAVsTy6gXY6aHq3mEKghAGUCZ7fxdNMyZQIDAQAB
+          -----END PUBLIC KEY-----
+        logout_path: /anything/logout
+#END
